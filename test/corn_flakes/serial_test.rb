@@ -41,6 +41,16 @@ module CornFlakes
       assert_equal "hpDcTGIUMU", @serial.next.to_s
     end
 
+    def test_string_seed_next
+      serial = Serial.new("test").next
+      assert_equal "wjElyYbGrx", serial.to_s
+    end
+
+    def test_separator_next
+      serial = Serial.new(100, separator: '-', separate_size: 4).next
+      assert_equal "hpDc-TGIU-MU", serial.to_s
+    end
+
     def test_default_length_is_10
       assert_equal 10, @serial.to_s.size
     end

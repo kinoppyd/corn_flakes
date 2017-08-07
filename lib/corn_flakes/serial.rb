@@ -21,7 +21,7 @@ module CornFlakes
     end
 
     def next
-      @next ||= Serial.new(to_i, length: length, ignores: ignores)
+      @next ||= Serial.new(to_i, length: length, ignores: ignores, separator: separator, separate_size: separate_size)
     end
 
     def to_s
@@ -29,7 +29,7 @@ module CornFlakes
     end
 
     def to_i
-      str2i(to_s)
+      separate? ? str2i(to_s.delete(separator)) : str2i(to_s)
     end
 
     private
@@ -44,7 +44,7 @@ module CornFlakes
 
     def generate(random)
       s = random.bytes(length * 1000).chars.select { |c| @@allows.include?(c) }.delete_if { |c| ignores.include?(c) }[0...length]
-      if separator && separate_size
+      if separate?
         s.each_slice(separate_size).map(&:join).join(separator)
       else
         s.join
@@ -59,5 +59,8 @@ module CornFlakes
       @random = random
     end
 
+    def separate?
+      separate_size && separator
+    end
   end
 end
