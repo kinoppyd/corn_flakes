@@ -7,11 +7,17 @@ module CornFlakes
     attr_reader :length, :ignores, :separator, :separate_size
 
     def initialize(seed, opts = {})
+      @seed = seed
       @length = opts[:length] || 10
       @ignores = opts[:ignores] || []
       @separator = opts[:separator]
       @separate_size = opts[:separate_size]
-      self.random = seed ? Random.new(seed) : Random.new 
+
+      self.random = if seed
+                      Random.new(seed.kind_of?(Integer) ? seed : str2i(seed))
+                    else
+                      Random.new
+                    end
     end
 
     def next
@@ -23,10 +29,14 @@ module CornFlakes
     end
 
     def to_i
-      to_s.bytes.join.to_i
+      str2i(to_s)
     end
 
     private
+
+    def str2i(s)
+      s.bytes.join.to_i
+    end
 
     def key
       @key ||= generate(random).encode("UTF-8")

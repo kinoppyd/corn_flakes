@@ -10,6 +10,11 @@ module CornFlakes
       assert_equal "CCGgiWlOCA", @serial.to_s
     end
 
+    def test_string_seed
+      serial = Serial.new("test")
+      assert_equal "kBrbcAjPGK", serial.to_s
+    end
+
     def test_separator
       serial = Serial.new(100, separator: '-', separate_size: 4)
       assert_equal "CCGg-iWlO-CA", serial.to_s
