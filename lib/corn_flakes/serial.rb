@@ -4,11 +4,13 @@ module CornFlakes
 
     @@allows = Set.new(('a'..'z').to_a + ('A'..'Z').to_a + (0..9).to_a)
 
-    attr_reader :length, :ignores
+    attr_reader :length, :ignores, :separator, :separate_size
 
     def initialize(seed, opts = {})
       @length = opts[:length] || 10
       @ignores = opts[:ignores] || []
+      @separator = opts[:separator]
+      @separate_size = opts[:separate_size]
       self.random = seed ? Random.new(seed) : Random.new 
     end
 
@@ -27,11 +29,16 @@ module CornFlakes
     private
 
     def key
-      @key ||= generate(random)[0...length].encode("UTF-8")
+      @key ||= generate(random).encode("UTF-8")
     end
 
     def generate(random)
-      random.bytes(length * 1000).chars.select { |c| @@allows.include?(c) }.delete_if { |c| ignores.include?(c) }.join
+      s = random.bytes(length * 1000).chars.select { |c| @@allows.include?(c) }.delete_if { |c| ignores.include?(c) }[0...length]
+      if separator && separate_size
+        s.each_slice(separate_size).map(&:join).join(separator)
+      else
+        s.join
+      end
     end
 
     def random

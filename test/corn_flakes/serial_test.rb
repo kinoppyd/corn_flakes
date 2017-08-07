@@ -10,6 +10,21 @@ module CornFlakes
       assert_equal "CCGgiWlOCA", @serial.to_s
     end
 
+    def test_separator
+      serial = Serial.new(100, separator: '-', separate_size: 4)
+      assert_equal "CCGg-iWlO-CA", serial.to_s
+    end
+
+    def test_separator_no_separate_size
+      serial = Serial.new(100, separator: '-')
+      assert_equal "CCGgiWlOCA", serial.to_s
+    end
+
+    def test_no_separator_with_separate_size
+      serial = Serial.new(100, separate_size: 4)
+      assert_equal "CCGgiWlOCA", serial.to_s
+    end
+
     def test_immutable_to_s
       @serial.to_s
       @serial.to_s
