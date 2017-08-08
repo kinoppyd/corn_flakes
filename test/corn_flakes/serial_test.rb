@@ -57,6 +57,11 @@ module CornFlakes
       assert !(serial.to_s.include?('T'))
     end
 
+    def test_prefix_and_suffix_next
+      serial = Serial.new(100, prefix: "A-", suffix: "-Z").next
+      assert_equal "A-hpDcTGIUMU-Z", serial.to_s
+    end
+
     def test_default_length_is_10
       assert_equal 10, @serial.to_s.size
     end
@@ -72,5 +77,41 @@ module CornFlakes
       assert !(serial.to_s.include?('g'))
       assert !(serial.to_s.include?('A'))
     end
+
+    def test_prefix
+      serial = Serial.new(100, prefix: "A-")
+      assert_equal "A-CCGgiWlOCA", serial.to_s
+    end
+
+    def test_suffix
+      serial = Serial.new(100, suffix: "-Z")
+      assert_equal "CCGgiWlOCA-Z", serial.to_s
+    end
+
+    def test_prefix_and_suffix
+      serial = Serial.new(100, prefix: "A-", suffix: "-Z")
+      assert_equal "A-CCGgiWlOCA-Z", serial.to_s
+    end
+
+    def test_length_is_not_affected_by_prefix
+      serial = Serial.new(100, prefix: "A-")
+      assert_equal 12, serial.to_s.size
+    end
+
+    def test_length_is_not_affected_by_suffix
+      serial = Serial.new(100, suffix: "-Z")
+      assert_equal 12, serial.to_s.size
+    end
+
+    def test_length_is_not_affected_by_prefix_and_suffix
+      serial = Serial.new(100, prefix: "A-", suffix: "-Z")
+      assert_equal 14, serial.to_s.size
+    end
+
+    def test_separator_is_not_affected_by_prefix_and_suffix
+      serial = Serial.new(100, separator: '-', separate_size: 4, prefix: "A-", suffix: "-Z")
+      assert_equal "A-CCGg-iWlO-CA-Z", serial.to_s
+    end
+
   end
 end
