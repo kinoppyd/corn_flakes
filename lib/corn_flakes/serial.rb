@@ -9,7 +9,7 @@ module CornFlakes
     def initialize(seed, opts = {})
       @seed = seed
       @length = opts[:length] || 10
-      @ignores = opts[:ignores] || []
+      @ignores = Set.new(opts[:ignores]) || Set.new
       @separator = opts[:separator]
       @separate_size = opts[:separate_size]
 

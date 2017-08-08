@@ -51,6 +51,12 @@ module CornFlakes
       assert_equal "hpDc-TGIU-MU", serial.to_s
     end
 
+    def test_ignores_next
+      serial = Serial.new(100, ignores: ['h', 'T']).next # next: hpDcTGIUMU
+      assert !(serial.to_s.include?('h'))
+      assert !(serial.to_s.include?('T'))
+    end
+
     def test_default_length_is_10
       assert_equal 10, @serial.to_s.size
     end
